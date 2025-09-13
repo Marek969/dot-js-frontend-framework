@@ -3,12 +3,14 @@
     "target": "ES6",
     "module": "ESNext",
     "moduleResolution": "Node",
+    "lib": ["esnext", "dom", "dom.iterable"],
     "outDir": "./dist",
-    "rootDir": "./src",
     "strict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "isolatedModules": true,
     "skipLibCheck": true
   },
-  "include": ["src"]
+  "include": ["framework/**/*", "example/**/*"]
 }

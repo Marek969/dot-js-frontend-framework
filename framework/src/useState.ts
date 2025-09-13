@@ -1,5 +1,5 @@
 /**
- * Enhanced useState hook for global state management.
+ * useState hook for global state management.
  * Stores state in a global map, allows subscriptions, and triggers updates on state change.
  * Useful for sharing state and reacting to changes across components.
  *
