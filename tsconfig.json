@@ -3,14 +3,11 @@
     "target": "ES6",
     "module": "ESNext",
     "moduleResolution": "Node",
-    "lib": ["esnext", "dom", "dom.iterable"],
-    "outDir": "./dist",
-    "strict": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "allowSyntheticDefaultImports": true,
-    "isolatedModules": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@dotjs/framework/*": ["framework/src/*"]
+    }
   },
   "include": ["framework/**/*", "example/**/*"]
 }
