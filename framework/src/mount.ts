@@ -1,4 +1,5 @@
 import { VNode, createElement } from "./vdom";
+import { updateElement } from "./vdom";
 
 let oldVNode: VNode | null = null;
 let rootEl: Element | null = null;
@@ -13,20 +14,19 @@ export function mount(vNode: VNode | null, container: Element | null) {
     rootEl = container;
   }
 
-  rootEl.innerHTML = "";
+  if (!vNode) {
+    if (rootEl.firstChild) rootEl.removeChild(rootEl.firstChild);
+    oldVNode = null;
+    return;
+  }
 
-  if (vNode) {
+  if (!oldVNode) {
     const el = createElement(vNode);
-    rootEl.appendChild(el);
+    if (rootEl.firstChild) rootEl.replaceChild(el, rootEl.firstChild);
+    else rootEl.appendChild(el);
+  } else {
+    updateElement(rootEl, vNode, oldVNode, 0);
   }
 
   oldVNode = vNode;
-}
-
-function handleSubmit(e: Event) {
-  e.preventDefault();
-  addTodo();
-  const input = document.querySelector(".todo-input") as HTMLInputElement;
-  if (input) input.value = "";
-  return false;
 }

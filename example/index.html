@@ -1,12 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Dot JS Example App</title>
-    <link rel="stylesheet" href="./style.css" />
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/app.ts"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <title>Dot-JS Demo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="#/" class="nav-link">Home</a>
+    <a href="#/todo" class="nav-link">Todo</a>
+    <a href="#/notes" class="nav-link">Notes</a>
+  </nav>
+  
+  <div id="app" class="main-container"></div>
+
+  <script type="module" src="src/app.ts"></script>
+</body>
 </html>

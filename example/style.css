@@ -1,104 +1,130 @@
+:root {
+  --bg-grad-start: #e0eafc;
+  --bg-grad-end: #cfdef3;
+  --card-bg: #ffffff;
+  --text: #0f172a;
+  --muted: #64748b;
+  --primary: #0d6efd;
+  --primary-hover: #0b5ed7;
+  --secondary: #6c757d;
+  --secondary-hover: #495057;
+  --danger: #dc3545;
+  --danger-hover: #a71d2a;
+  --border: #e5e7eb;
+  --shadow: 0 8px 30px rgba(2,6,23,.08);
+  --radius: 16px;
+}
+
 body {
   font-family: 'Segoe UI', Arial, sans-serif;
-  background: #f7f7f7;
+  background: linear-gradient(120deg, var(--bg-grad-start) 0%, var(--bg-grad-end) 100%);
+  color: var(--text);
   margin: 0;
   padding: 0;
+  min-height: 100vh;
 }
 
-#app {
-  max-width: 420px;
+#app, .main-container {
+  max-width: 900px;
+  width: 90%;
   margin: 3rem auto;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
   padding: 2rem;
+  animation: fadeIn 0.3s ease-in-out;
 }
 
-.todo-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  max-height: 400px;
-  overflow-y: auto;
-}
-
-.todo-item {
-  padding: 0.5rem 0;
-  border-bottom: 1px solid #eee;
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: background 0.2s;
-}
-
-.todo-item:hover {
-  background: #f0f4fa;
-}
-
-.button-primary, .button-secondary, .button-delete, .nav-link {
-  border: none;
-  border-radius: 4px;
-  padding: 0.5rem 1rem;
-  margin-left: 0.5rem;
-  cursor: pointer;
-  font-size: 1rem;
-  text-decoration: none;
-  display: inline-block;
-}
-
-.button-primary {
-  background: #007bff;
-  color: #fff;
-}
-
-.button-secondary {
-  background: #6c757d;
-  color: #fff;
-}
-
-.button-delete {
-  background: #dc3545;
-  color: #fff;
-  padding: 0.25rem 0.5rem;
-}
-
-.todo-input {
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1rem;
-  width: 60%;
-}
-
-.stats {
+  justify-content: center;
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border);
+  padding: 0.75rem;
   margin-bottom: 1rem;
-  font-size: 1rem;
-  color: #555;
+  border-radius: 0 0 var(--radius) var(--radius);
+  box-shadow: var(--shadow);
 }
 
 .nav-link {
-  background: #e9ecef;
-  color: #007bff;
-  margin: 0 0.25rem;
+  background: #eef2ff;
+  color: var(--primary);
+  margin: 0 0.5rem;
+  padding: 0.5rem 1.2rem;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: .2px;
+  transition: background 0.2s, color 0.2s, transform .08s ease;
 }
-
-.nav-link.active {
-  background: #007bff;
+.nav-link.active, .nav-link:hover {
+  background: var(--primary);
   color: #fff;
 }
+.nav-link:active { transform: translateY(1px); }
 
-a {
-  color: #007bff;
-  text-decoration: none;
-  margin: 0 0.25rem;
+h2 { margin: 0 0 1rem 0; }
+
+form { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+
+.todo-input, .note-input, textarea {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 1rem;
+  flex: 1;
+  transition: border 0.2s, box-shadow .2s;
+}
+.todo-input:focus, .note-input:focus, textarea:focus {
+  border-color: var(--primary);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(13,110,253,.12);
 }
 
-a:hover {
-  text-decoration: underline;
+.button-primary, .button-secondary, .button-delete {
+  border: none;
+  border-radius: 10px;
+  padding: 0.55rem 1.1rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform .08s;
+  box-shadow: 0 2px 10px rgba(2,6,23,.06);
+}
+.button-primary { background: var(--primary); color: #fff; }
+.button-primary:hover { background: var(--primary-hover); }
+.button-secondary { background: var(--secondary); color: #fff; }
+.button-secondary:hover { background: var(--secondary-hover); }
+.button-delete { background: var(--danger); color: #fff; padding: 0.35rem 0.9rem; }
+.button-delete:hover { background: var(--danger-hover); }
+.button-primary:active, .button-secondary:active, .button-delete:active { transform: translateY(1px); }
+
+.todo-list, .notes-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 60vh;
+  overflow-y: auto;
 }
 
-form {
-  display: flex;
+/* Stable grid: content | actions | delete */
+.todo-item, .note-item {
+  padding: 0.6rem 0.25rem;
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 1fr auto auto;
   gap: 0.5rem;
-  margin-bottom: 1rem;
+  align-items: center;
+  transition: background 0.2s;
 }
+.todo-item:hover, .note-item:hover { background: #f8fafc; }
+
+.todo-item span { cursor: pointer; transition: color 0.2s; }
+.todo-item span.completed { text-decoration: line-through; color: #94a3b8; }
+
+.delete-icon { width: 18px; height: 18px; vertical-align: middle; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }

@@ -1,46 +1,67 @@
 import { h } from "@dotjs/framework";
-import { Stats } from "../components/Stats";
-import { TodoSection } from "../components/TodoSection";
-import { addTodo, loadSampleData, useStore } from "../store";
-import store from "../store";
 
 export function Home() {
-  const { todos, newTodo } = useStore();
-  let currentInput = "";
-
-  function handleInput(e: Event) {
-    currentInput = (e.target as HTMLInputElement).value;
-  }
-
-  function handleSubmit(e: Event) {
-    e.preventDefault();
-    store.setState((s) => ({
-      ...s,
-      todos: s.todos.concat({ id: Date.now(), text: currentInput.trim(), completed: false }),
-    }));
-    const input = document.querySelector(".todo-input") as HTMLInputElement;
-    if (input) input.value = "";
-    currentInput = "";
-    return false;
-  }
-
-  return h("div", { className: "p-6" }, [
-    h("h2", { className: "text-xl font-semibold mb-4" }, "Todo List"),
-    Stats(),
-    h("form", { onSubmit: handleSubmit }, [
-      h("input", {
-        type: "text",
-        placeholder: "Add a task...",
-        onInput: handleInput,
-        className: "todo-input",
-      }),
-      h("button", { type: "submit", className: "button-primary" }, "Add"),
-      h("button", { type: "button", onClick: loadSampleData, className: "button-secondary" }, "Load Sample"),
+  return h("div", { className: "main-container" }, [
+    h("section", {
+      style: {
+        display: "flex",
+        flexDirection: "column",
+        gap: "0.75rem",
+      }
+    }, [
+      h("h1", { style: { margin: 0 } }, "Dot‑JS Playground"),
+      h(
+        "p",
+        { style: { margin: 0, color: "#64748b" } },
+        "A tiny framework with virtual DOM, store, router and delegated events."
+      ),
+      h("div", { style: { display: "flex", gap: "0.5rem", marginTop: "0.25rem" } }, [
+        h(
+          "a",
+          { href: "#/todo", className: "button-primary", style: { textDecoration: "none" } },
+          "Open Todo"
+        ),
+        h(
+          "a",
+          { href: "#/notes", className: "button-secondary", style: { textDecoration: "none" } },
+          "Open Notes"
+        ),
+      ]),
     ]),
-    TodoSection({ todos }),
-    h("div", { style: { marginTop: "1rem", textAlign: "center" } }, [
-      h("a", { href: "#/", className: "nav-link" }, "All"),
-      h("a", { href: "#/virtual", className: "nav-link" }, "Virtual List"),
-    ]),
+
+    h(
+      "section",
+      {
+        style: {
+          marginTop: "1.25rem",
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+          gap: "0.75rem",
+        },
+      },
+      [
+        card("⚡ Rendering", "Light virtual DOM with diff and prop updates."),
+        card("🧠 State", "Global store, subscriptions and localStorage persistence."),
+        card("🧭 Routing", "Hash routing with reactive subscriptions."),
+      ]
+    ),
   ]);
+}
+
+function card(title: string, desc: string) {
+  return h(
+    "div",
+    {
+      style: {
+        border: "1px solid #e5e7eb",
+        borderRadius: "12px",
+        padding: "1rem",
+        background: "#ffffff",
+      },
+    },
+    [
+      h("h3", { style: { margin: "0 0 0.25rem 0" } }, title),
+      h("p", { style: { margin: 0, color: "#64748b" } }, desc),
+    ]
+  );
 }

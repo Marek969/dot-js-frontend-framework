@@ -16,8 +16,16 @@ export function TaskItem({ todo }: { todo: Todo }) {
       ),
       h(
         "button",
-        { onClick: () => deleteTodo(todo.id), className: "button-delete ml-2" },
-        "×"
+        {
+          onClick: () => deleteTodo(todo.id),
+          className: "button-delete",
+          style: { marginLeft: "1rem", background: "#dc3545", border: "none" },
+        },
+        h("img", {
+          src: "/icons/delete.svg",
+          alt: "Delete",
+          className: "delete-icon",
+        })
       ),
     ]
   );

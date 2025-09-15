@@ -6,6 +6,7 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@dotjs/framework": ["framework/src/index"],
       "@dotjs/framework/*": ["framework/src/*"]
     }
   },

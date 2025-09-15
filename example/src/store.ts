@@ -1,70 +1,106 @@
 import { createStore } from "@dotjs/framework";
 
+export interface Note {
+  id: number;
+  text: string;
+}
+
 export interface Todo {
   id: number;
   text: string;
   completed: boolean;
 }
+
 export interface AppState {
   todos: Todo[];
-  scrollOffset: number;
-  newTodo: string;
+  notes: Note[];
+  editingId?: number | null;
+  draftValue?: string;
 }
 
-// Load from localStorage
+// Load state from localStorage
 function loadState(): AppState {
   try {
-    const raw = localStorage.getItem("todos");
-    const todos = raw ? JSON.parse(raw) : [];
-    return { todos, scrollOffset: 0, newTodo: "" };
+    const raw = localStorage.getItem("appState");
+    const parsed = raw ? JSON.parse(raw) : { todos: [], notes: [] };
+    return {
+      todos: parsed.todos || [],
+      notes: parsed.notes || [],
+      editingId: null,
+      draftValue: "",
+    };
   } catch {
-    return { todos: [], scrollOffset: 0, newTodo: "" };
+    return {
+      todos: [],
+      notes: [],
+      editingId: null,
+      draftValue: "",
+    };
   }
 }
 
 const store = createStore<AppState>(loadState());
 
-// Save to localStorage on change
+// Persist only durable state
 store.subscribe((state) => {
-  localStorage.setItem("todos", JSON.stringify(state.todos));
+  const persist = { todos: state.todos, notes: state.notes };
+  localStorage.setItem("appState", JSON.stringify(persist));
 });
 
 export function useStore() {
   return store.getState();
 }
-export function addTodo() {
-  const { newTodo, todos, scrollOffset } = store.getState();
-  if (!newTodo || !newTodo.trim()) return;
+
+// ---------- Notes ----------
+export function addNote(text: string) {
+  if (!text || !text.trim()) return;
   store.setState((s) => ({
     ...s,
-    todos: s.todos.concat({ id: Date.now(), text: newTodo.trim(), completed: false }),
-    newTodo: "",
+    notes: s.notes.concat({ id: Date.now(), text: text.trim() }),
   }));
 }
-export function toggleTodo(id: number) {
+
+export function deleteNote(id: number) {
   store.setState((s) => ({
     ...s,
-    todos: s.todos.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t)),
+    notes: s.notes.filter((n) => n.id !== id),
   }));
 }
+
+export function updateNote(id: number, text: string) {
+  store.setState((s) => ({
+    ...s,
+    notes: s.notes.map((n) => (n.id === id ? { ...n, text } : n)),
+  }));
+}
+
+// ---------- Todos ----------
+export function addTodo(text: string) {
+  if (!text || !text.trim()) return;
+  store.setState((s) => ({
+    ...s,
+    todos: s.todos.concat({ id: Date.now(), text: text.trim(), completed: false }),
+  }));
+}
+
 export function deleteTodo(id: number) {
   store.setState((s) => ({
     ...s,
     todos: s.todos.filter((t) => t.id !== id),
   }));
 }
-export async function loadSampleData() {
-  const res = await fetch("https://jsonplaceholder.typicode.com/todos?_limit=5");
-  const data = await res.json();
+
+export function toggleTodo(id: number) {
   store.setState((s) => ({
     ...s,
-    todos: s.todos.concat(
-      data.map((t: any) => ({
-        id: t.id + Date.now(),
-        text: t.title,
-        completed: t.completed,
-      }))
-    ),
+    todos: s.todos.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t)),
+  }));
+}
+
+export function updateTodo(id: number, text: string) {
+  store.setState((s) => ({
+    ...s,
+    todos: s.todos.map((t) => (t.id === id ? { ...t, text } : t)),
   }));
 }
 
