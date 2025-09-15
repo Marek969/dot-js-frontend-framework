@@ -22,3 +22,11 @@ export function mount(vNode: VNode | null, container: Element | null) {
 
   oldVNode = vNode;
 }
+
+function handleSubmit(e: Event) {
+  e.preventDefault();
+  addTodo();
+  const input = document.querySelector(".todo-input") as HTMLInputElement;
+  if (input) input.value = "";
+  return false;
+}

@@ -6,18 +6,21 @@ import store from "../store";
 
 export function Home() {
   const { todos, newTodo } = useStore();
+  let currentInput = "";
 
   function handleInput(e: Event) {
-    const value = (e.target as HTMLInputElement).value;
-    store.setState((s) => ({
-      ...s,
-      newTodo: value,
-    }));
+    currentInput = (e.target as HTMLInputElement).value;
   }
 
   function handleSubmit(e: Event) {
     e.preventDefault();
-    addTodo();
+    store.setState((s) => ({
+      ...s,
+      todos: s.todos.concat({ id: Date.now(), text: currentInput.trim(), completed: false }),
+    }));
+    const input = document.querySelector(".todo-input") as HTMLInputElement;
+    if (input) input.value = "";
+    currentInput = "";
     return false;
   }
 
@@ -28,7 +31,6 @@ export function Home() {
       h("input", {
         type: "text",
         placeholder: "Add a task...",
-        value: newTodo,
         onInput: handleInput,
         className: "todo-input",
       }),
@@ -36,10 +38,9 @@ export function Home() {
       h("button", { type: "button", onClick: loadSampleData, className: "button-secondary" }, "Load Sample"),
     ]),
     TodoSection({ todos }),
-    h("div", null, [
-      h("a", { href: "#/" }, "All"),
-      h("span", null, " | "),
-      h("a", { href: "#/virtual" }, "Virtual List"),
+    h("div", { style: { marginTop: "1rem", textAlign: "center" } }, [
+      h("a", { href: "#/", className: "nav-link" }, "All"),
+      h("a", { href: "#/virtual", className: "nav-link" }, "Virtual List"),
     ]),
   ]);
 }

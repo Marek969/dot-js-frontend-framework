@@ -6,11 +6,11 @@ body {
 }
 
 #app {
-  max-width: 400px;
+  max-width: 420px;
   margin: 3rem auto;
   background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
   padding: 2rem;
 }
 
@@ -18,6 +18,8 @@ body {
   list-style: none;
   padding: 0;
   margin: 0;
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 .todo-item {
@@ -33,13 +35,15 @@ body {
   background: #f0f4fa;
 }
 
-.button-primary, .button-secondary, .button-delete {
+.button-primary, .button-secondary, .button-delete, .nav-link {
   border: none;
   border-radius: 4px;
   padding: 0.5rem 1rem;
   margin-left: 0.5rem;
   cursor: pointer;
   font-size: 1rem;
+  text-decoration: none;
+  display: inline-block;
 }
 
 .button-primary {
@@ -70,6 +74,17 @@ body {
   margin-bottom: 1rem;
   font-size: 1rem;
   color: #555;
+}
+
+.nav-link {
+  background: #e9ecef;
+  color: #007bff;
+  margin: 0 0.25rem;
+}
+
+.nav-link.active {
+  background: #007bff;
+  color: #fff;
 }
 
 a {
