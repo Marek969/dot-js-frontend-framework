@@ -1,4 +1,17 @@
-export type VNodeChild = string | number | boolean | VNode | VNode[] | null | undefined;
+import {
+  addDelegatedEvent,
+  removeDelegatedEvent,
+  NON_BUBBLING,
+} from "./events";
+
+export type VNodeChild =
+  | string
+  | number
+  | boolean
+  | VNode
+  | VNode[]
+  | null
+  | undefined;
 export type Component<P = Record<string, any>> = (props: P) => VNode;
 
 export interface VNode {
@@ -28,7 +41,11 @@ function normalizeChildren(children: VNodeChild[]): VNode[] {
       typeof child === "number" ||
       typeof child === "boolean"
     ) {
-      result.push({ type: "text", props: { nodeValue: String(child) }, children: [] });
+      result.push({
+        type: "text",
+        props: { nodeValue: String(child) },
+        children: [],
+      });
     } else if (child != null) {
       result.push(child as VNode);
     }
@@ -57,13 +74,29 @@ export function createElement(vnode: VNode): Node {
     for (const [key, value] of Object.entries(vnode.props)) {
       if (key.startsWith("on") && typeof value === "function") {
         const event = key.slice(2).toLowerCase();
-        (el as any).__listeners = (el as any).__listeners || {};
-        (el as any).__listeners[event] = value as EventListener;
-      } else if (key === "style" && typeof value === "object" && value !== null) {
+        if (NON_BUBBLING.has(event)) {
+          (el as any).__directListeners = (el as any).__directListeners || {};
+          (el as any).__directListeners[event] = value as EventListener;
+          el.addEventListener(event, value);
+        } else {
+          (el as any).__listeners = (el as any).__listeners || {};
+          (el as any).__listeners[event] = value as EventListener;
+          addDelegatedEvent(event);
+        }
+      } else if (
+        key === "style" &&
+        typeof value === "object" &&
+        value !== null
+      ) {
         Object.assign((el as HTMLElement).style, value);
       } else if (key === "className") {
         (el as any).className = String(value ?? "");
-      } else if (key === "value" && (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement || el instanceof HTMLSelectElement)) {
+      } else if (
+        key === "value" &&
+        (el instanceof HTMLInputElement ||
+          el instanceof HTMLTextAreaElement ||
+          el instanceof HTMLSelectElement)
+      ) {
         (el as any).value = value ?? "";
       } else if (key === "checked" && el instanceof HTMLInputElement) {
         (el as any).checked = Boolean(value);
@@ -102,7 +135,18 @@ function applyProps(el: Element, newProps: Record<string, any> | null, oldProps:
     if (!(key in n)) {
       if (key.startsWith("on")) {
         const event = key.slice(2).toLowerCase();
-        (el as any).__listeners && delete (el as any).__listeners[event];
+        if (NON_BUBBLING.has(event)) {
+          const prev = (el as any).__directListeners?.[event];
+          if (prev) {
+            el.removeEventListener(event, prev);
+            delete (el as any).__directListeners[event];
+          }
+        } else {
+          if ((el as any).__listeners?.[event]) {
+            delete (el as any).__listeners[event];
+            removeDelegatedEvent(event);
+          }
+        }
       } else if (key === "className") {
         (el as any).className = "";
       } else if (key === "style") {
@@ -121,8 +165,18 @@ function applyProps(el: Element, newProps: Record<string, any> | null, oldProps:
   for (const [key, value] of Object.entries(n)) {
     if (key.startsWith("on") && typeof value === "function") {
       const event = key.slice(2).toLowerCase();
-      (el as any).__listeners = (el as any).__listeners || {};
-      (el as any).__listeners[event] = value as EventListener;
+      if (NON_BUBBLING.has(event)) {
+        (el as any).__directListeners = (el as any).__directListeners || {};
+        const prev = (el as any).__directListeners[event];
+        if (prev) el.removeEventListener(event, prev);
+        (el as any).__directListeners[event] = value as EventListener;
+        el.addEventListener(event, value);
+      } else {
+        const hadOld = o && !!o[key];
+        (el as any).__listeners = (el as any).__listeners || {};
+        (el as any).__listeners[event] = value as EventListener;
+        if (!hadOld) addDelegatedEvent(event);
+      }
     } else if (key === "style" && typeof value === "object" && value !== null) {
       Object.assign((el as HTMLElement).style, value);
     } else if (key === "className") {

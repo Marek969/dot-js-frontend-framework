@@ -1,10 +1,7 @@
-export type DelegatedEntry = { handler: (e: Event) => void; count: number };
 
-export const NON_BUBBLING = new Set([
-  'focus', 'blur', 'mouseenter', 'mouseleave', 'scroll'
-]);
-
+type DelegatedEntry = { handler: (e: Event) => void; count: number };
 const delegated: Map<string, DelegatedEntry> = new Map();
+
 declare global {
   interface Element {
     __listeners?: Record<string, EventListener | undefined>;
@@ -13,32 +10,30 @@ declare global {
 }
 
 export function addDelegatedEvent(eventName: string): void {
-  if (NON_BUBBLING.has(eventName)) return;
   if (delegated.has(eventName)) {
     delegated.get(eventName)!.count++;
     return;
   }
-
   const handler = function (e: Event) {
     let node = e.target as Element | null;
     while (node) {
-      const fn = node.__listeners?.[eventName];
-      if (typeof fn === 'function') {
+      const listeners = node.__listeners;
+      const fn = listeners && listeners[eventName];
+      if (typeof fn === "function") {
         try {
-          const ret = fn.call(node, e);
+          const ret = (fn as unknown as (ev: Event) => any).call(node, e);
           if (ret === false) {
             e.preventDefault();
             e.stopPropagation();
             return;
           }
         } catch (err) {
-          console.error('Delegated handler error', err);
+          console.error("Delegated handler error", err);
         }
       }
       node = node.parentElement;
     }
   };
-
   document.addEventListener(eventName, handler);
   delegated.set(eventName, { handler, count: 1 });
 }
