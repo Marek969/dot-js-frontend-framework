@@ -3,12 +3,12 @@
     "target": "ES6",
     "module": "ESNext",
     "moduleResolution": "Node",
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "strict": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@dotjs/framework": ["framework/src/index"],
+      "@dotjs/framework/*": ["framework/src/*"]
+    }
   },
-  "include": ["src"]
+  "include": ["framework/**/*", "example/**/*"]
 }
