@@ -231,14 +231,14 @@ A: Use a global CSS file and import it in your HTML.
 
 ## How-To Guides
 
-- [Getting Started](../../docs/getting-started.md)
-- [How To Use Components](../../docs/how-to-components.md)
-- [How To Use Routing](../../docs/how-to-route.md)
-- [How To Use CRUD with HTTP](../../docs/how-to-crud.md)
-- [Parent-Child Components](../../docs/how-to-component-sharing.md)
+- [Getting Started](../docs/getting-started.md)
+- [How To Use Components](../docs/how-to-components.md)
+- [How To Use Routing](../docs/how-to-route.md)
+- [How To Use CRUD with HTTP](../docs/how-to-crud.md)
+- [Parent-Child Components](../docs/how-to-component-sharing.md)
 
 ---
 
 ## Screenshots
 
-See [example/README.md](../../example/README.md) for screenshots of the demo app.
+See [example/README.md](../example/README.md) for screenshots of the demo app.
