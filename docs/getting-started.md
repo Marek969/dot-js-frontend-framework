@@ -6,12 +6,16 @@ This guide will help you set up your first Dot-JS project from scratch.
 
 ## 1. Clone the repository
 
+Clone the official Dot-JS repository from Gitea:
+
 ```sh
-git clone https://github.com/your-repo/dot-js.git
-cd dot-js
+git clone https://gitea.kood.tech/robinpall/frontend-framework.git
+cd frontend-framework
 ```
 
 ## 2. Install dependencies
+
+Install all required packages using npm:
 
 ```sh
 npm install
@@ -19,20 +23,24 @@ npm install
 
 ## 3. Run the development server
 
+Start the local development server:
+
 ```sh
 npm run dev
 ```
 
 ## 4. Open your app
 
-Visit [http://localhost:5173](http://localhost:5173) in your browser.
+Open your browser and visit [http://localhost:5173](http://localhost:5173) to see your app running.
 
 ---
 
 ## 5. Project structure
 
+Your project will look like this:
+
 ```
-dot-js/
+frontend-framework/
 ├── framework/
 │   └── src/
 ├── example/
@@ -44,15 +52,15 @@ dot-js/
 ├── README.md
 ```
 
-- `framework/` — the framework source code
-- `example/` — your demo app
+- `framework/` — the Dot-JS framework source code
+- `example/` — your demo application
 - `docs/` — documentation and how-to guides
 
 ---
 
 ## 6. Create your first component
 
-Open `example/src/app.ts` and add:
+Open `example/src/app.ts` and add the following code to create a simple component:
 
 ```ts
 import { h, mount } from "@dotjs/framework";
@@ -68,11 +76,13 @@ const app = h("div", { className: "container" }, [
 mount(app, document.getElementById("app"));
 ```
 
+This will render "Hello, World!" on the page.
+
 ---
 
 ## 7. Add a new page
 
-Create `example/src/pages/About.ts`:
+To add a new page, create `example/src/pages/About.ts`:
 
 ```ts
 export function About() {
@@ -94,6 +104,8 @@ const routes = {
 
 const router = createRouter(routes);
 ```
+
+Now you can navigate to `/about` in your app.
 
 ---
 
@@ -123,10 +135,10 @@ export function Home() {
 
 ## 9. Next steps
 
-- Explore [How To Use Components](./how-to-components.md)
-- Explore [How To Use Routing](./how-to-route.md)
-- Explore [How To Use CRUD with HTTP](./how-to-crud.md)
-- Explore [Parent-Child Components](./how-to-component-sharing.md)
+- Explore [How To Use Components](./how-to-components.md) for more on reusable UI.
+- Explore [How To Use Routing](./how-to-route.md) for navigation between pages.
+- Explore [How To Use CRUD with HTTP](./how-to-crud.md) for data fetching and manipulation.
+- Explore [Parent-Child Components](./how-to-component-sharing.md) for component composition.
 
 ---
 

@@ -1,8 +1,11 @@
 # How To Use CRUD with HTTP
 
-Dot-JS provides a simple HTTP client for REST API calls.
+Dot-JS provides a simple HTTP client for REST API calls.  
+CRUD stands for Create, Read, Update, Delete — the basic operations for working with data.
 
-## Example: Fetch todos
+---
+
+## Example: Fetch todos (Read)
 
 ```ts
 import { http } from "@dotjs/framework";
@@ -15,7 +18,9 @@ async function fetchTodos() {
 }
 ```
 
-## Example: Add todo
+---
+
+## Example: Add todo (Create)
 
 ```ts
 async function addTodo(text) {
@@ -24,7 +29,9 @@ async function addTodo(text) {
 }
 ```
 
-## Example: Delete todo
+---
+
+## Example: Delete todo (Delete)
 
 ```ts
 async function deleteTodo(id) {
@@ -32,3 +39,11 @@ async function deleteTodo(id) {
   if (res.ok) fetchTodos();
 }
 ```
+
+---
+
+## Tips
+
+- Always check `res.ok` before using the response data.
+- After creating or deleting, refresh your data by calling `fetchTodos()`.
+- Handle errors gracefully (show messages or retry).
