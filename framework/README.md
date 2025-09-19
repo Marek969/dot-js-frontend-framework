@@ -17,6 +17,7 @@ Dot-js includes state management, routing, a virtual DOM renderer, delegated eve
 - [Performance](#performance)
 - [Extending Your App](#extending-your-app)
 - [FAQ](#faq)
+- [How-To Guides](#how-to-guides)
 - [Screenshots](#screenshots)
 
 ---
@@ -51,6 +52,8 @@ flowchart TD
 ## Installation
 
 ```bash
+git clone https://gitea.kood.tech/robinpall/frontend-framework.git
+cd frontend-framework
 npm install
 npm run dev
 ```
@@ -65,19 +68,7 @@ resolve: { alias: { "@dotjs/framework": path.resolve(__dirname, "framework/src")
 
 ## Getting Started
 
-```ts
-import { h, mount } from "@dotjs/framework";
-
-function Hello({ name }: { name: string }) {
-  return h("h1", null, `Hello, ${name}!`);
-}
-
-const app = h("div", { className: "container" }, [
-  Hello({ name: "World" })
-]);
-
-mount(app, document.getElementById("app"));
-```
+See [Getting Started Guide](../../docs/getting-started.md) for a step-by-step tutorial.
 
 ---
 
@@ -235,3 +226,19 @@ A: State is saved to localStorage automatically.
 
 **Q: How do I add global styles?**  
 A: Use a global CSS file and import it in your HTML.
+
+---
+
+## How-To Guides
+
+- [Getting Started](../../docs/getting-started.md)
+- [How To Use Components](../../docs/how-to-components.md)
+- [How To Use Routing](../../docs/how-to-route.md)
+- [How To Use CRUD with HTTP](../../docs/how-to-crud.md)
+- [Parent-Child Components](../../docs/how-to-component-sharing.md)
+
+---
+
+## Screenshots
+
+See [example/README.md](../../example/README.md) for screenshots of the demo app.
