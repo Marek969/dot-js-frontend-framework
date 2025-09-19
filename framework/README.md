@@ -1,23 +1,67 @@
 # Dot-js Framework
 
-A lightweight, React-like front-end framework that lets you describe user interfaces with JavaScript. It includes state management, routing, a virtual DOM renderer, delegated event handling, DOM utilities, and a tiny HTTP client.
+A lightweight, React-like front-end framework for building modern web applications with JavaScript.  
+Dot-js includes state management, routing, a virtual DOM renderer, delegated event handling, DOM utilities, and a tiny HTTP client.
 
-- **Architecture**: virtual DOM + pure functions for components, global store, router observer, delegated events for performance.
-- **No external UI frameworks**: implemented from scratch.
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Architecture](#architecture)
+- [Installation](#installation)
+- [Getting Started](#getting-started)
+- [API Reference](#api-reference)
+- [Best Practices](#best-practices)
+- [Troubleshooting](#troubleshooting)
+- [Performance](#performance)
+- [Extending Your App](#extending-your-app)
+- [FAQ](#faq)
+- [Screenshots](#screenshots)
+
+---
+
+## Overview
+
+Dot-js is implemented from scratch, with no external UI frameworks.  
+It provides a familiar, React-like structure for building apps quickly and efficiently.
+
+---
+
+## Architecture
+
+```mermaid
+flowchart TD
+    App --> Router
+    App --> Store
+    Store --> Components
+    Components --> vDOM
+    vDOM --> DOM
+```
+
+- **Components**: Pure functions returning virtual DOM nodes.
+- **VDOM**: Lightweight description of DOM, diffed for efficient updates.
+- **Store**: Centralized state management.
+- **Router**: URL-based navigation and page rendering.
+- **Events**: Delegated event handling for performance.
+- **HTTP**: Simple fetch wrapper for API calls.
+
+---
 
 ## Installation
-
-- Using Vite (dev in this repo):
 
 ```bash
 npm install
 npm run dev
 ```
 
-- As a local workspace alias (see `vite.config.ts`):
+Or use as a local workspace alias (see `vite.config.ts`):
+
 ```ts
 resolve: { alias: { "@dotjs/framework": path.resolve(__dirname, "framework/src") } }
 ```
+
+---
 
 ## Getting Started
 
@@ -35,23 +79,11 @@ const app = h("div", { className: "container" }, [
 mount(app, document.getElementById("app"));
 ```
 
-## Architecture and Design Principles
+---
 
-- **Components are functions**: `(props) => VNode`.
-- **VNode builder**: `h(type, props, ...children)` returns a lightweight description of DOM.
-- **Virtual DOM creation**: `createElement(vnode)` materializes nodes.
-- **Mounting**: `mount(vnode, container)` renders to the DOM root.
-- **State**: `createStore(initial)` returns `{ getState, setState, subscribe }` for global app state. Pure updates produce re-renders.
-- **Routing**: `createRouter(routes, fallback, { mode })` matches `#/path` or History API, exposes `{ getCurrent, navigate, subscribe }`.
-- **Events**: Delegated event handling. Component event props like `onClick` are stored on elements under `__listeners` and dispatched via a single document listener per event type when enabled.
-- **HTTP**: `http.get/post/put/del/safe` tiny wrapper over `fetch` with JSON/text parsing and friendly errors.
-- **Performance**: Encourages delegated events, immutable state updates, and lean updates via diffed VDOM.
-
-## API Reference with Examples
+## API Reference
 
 ### VDOM
-- `h(type, props?, ...children)`
-- `mount(vnode, container)`
 
 ```ts
 import { h, mount } from "@dotjs/framework";
@@ -66,7 +98,9 @@ mount(view, document.getElementById("app"));
 Props support:
 - `className`, `style` (object), boolean attributes, standard DOM attributes, and event props starting with `on` (e.g., `onClick`, `onInput`, `onSubmit`).
 
-### State
+---
+
+### State Management
 
 ```ts
 import { createStore } from "@dotjs/framework";
@@ -89,9 +123,11 @@ function App() {
 }
 ```
 
-- Immutable updates are recommended.
+- Use immutable updates.
 - Subscribe to trigger re-renders.
-- You can persist and hydrate state externally (e.g., `localStorage`).
+- Persist and hydrate state externally (e.g., `localStorage`).
+
+---
 
 ### Routing
 
@@ -117,7 +153,9 @@ function render() {
 - Supports `hash` (default) and `history` modes.
 - `navigate(path)` changes the URL programmatically.
 
-### Events (Delegated)
+---
+
+### Event Handling (Delegated)
 
 - Attach handlers in props: `onClick`, `onInput`, `onSubmit`, etc.
 - Handlers may return `false` to `preventDefault()` and `stopPropagation()` when using delegated events.
@@ -130,7 +168,7 @@ addDelegatedEvent("input");
 addDelegatedEvent("submit");
 ```
 
-The VDOM stores handlers on elements under `__listeners[eventName]`. The delegated dispatcher walks up the DOM to find and invoke them.
+---
 
 ### HTTP
 
@@ -142,14 +180,58 @@ const res = await http.get<{ items: string[] }>("/api/items");
 
 - `http.safe(url, options)` returns `{ ok: true, body } | { ok: false, error }`.
 
-### Best Practices
+---
+
+## Best Practices
+
 - Keep components pure; derive UI from props + global state.
 - Use immutable updates in the store; subscribe once at the app root to re-render.
 - Prefer delegated events for high event volumes.
 - Co-locate small helpers with components; keep side effects at boundaries (store, router, HTTP).
-- For very large lists, consider list virtualization (render only visible items).
+- For very large lists, use list virtualization (render only visible items).
 
-### Performance Notes
+---
+
+## Troubleshooting
+
+| Problem                | Solution                                 |
+|------------------------|------------------------------------------|
+| State not updating     | Use `store.setState` and subscribe       |
+| Routing not working    | Check route definitions and URL format   |
+| HTTP errors            | Check endpoint and CORS settings         |
+| UI not re-rendering    | Ensure you use `useStore()` in components|
+| Button not visible     | Check CSS and element structure          |
+| localStorage issues    | Clear browser storage and reload         |
+
+---
+
+## Performance
+
 - Delegated events reduce listener churn and memory.
-- Avoid deep tree re-renders by splitting components and only updating state that changes.
-- Minimize DOM mutations by relying on VDOM diffing and prop updates.
+- Virtual DOM minimizes DOM updates.
+- VirtualList renders only visible items for large lists.
+
+**Performance Test Example:**
+
+```ts
+const bigArray = Array.from({ length: 10000 }, (_, i) => ({ id: i, text: `Item ${i}` }));
+h(VirtualList, { items: bigArray, visibleCount: 50 });
+```
+
+---
+
+## Extending Your App
+
+- Add new pages in `src/pages/`
+- Add new components in `src/components/`
+- Register new routes in `router.ts`
+
+---
+
+## FAQ
+
+**Q: How do I persist state?**  
+A: State is saved to localStorage automatically.
+
+**Q: How do I add global styles?**  
+A: Use a global CSS file and import it in your HTML.

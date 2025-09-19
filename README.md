@@ -1,13 +1,23 @@
-# Dot-js framework
+# Dot-js Framework
 
-## This is a React-like framework, which allows to create applications easily using a React like structure for familiarity.
+A lightweight, React-like framework for building applications easily using a familiar structure.
 
-### Features:
+---
+
+## Features
 
 - State management
 - Routing
 - Event handling
 - DOM manipulation
-- React-like component defining
+- React-like component definition
 - HTTP actions
 - Built-in components for easy application development
+
+---
+
+## Quick Start
+
+See [framework/README.md](./framework/README.md) for full documentation and examples.
+
+See [example/README.md](./example/README.md) for the demo app and usage.
