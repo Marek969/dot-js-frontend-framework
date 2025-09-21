@@ -75,7 +75,7 @@ MIT
 ## Authors
 
 - Robin Paell (Leader)
-- Sofija Jelizarova (Member)
+- samdwichesky (Member)
 - Marek Sarkisjan (Member)
 
 ---
