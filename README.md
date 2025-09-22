@@ -72,14 +72,3 @@ MIT
 
 ---
 
-## Authors
-
-- Robin Paell (Leader)
-- samdwichesky (Member)
-- Marek Sarkisjan (Member)
-
----
-
-## Repository
-
-[https://gitea.kood.tech/robinpall/frontend-framework]
